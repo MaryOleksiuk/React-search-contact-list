@@ -6,52 +6,83 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
-    <div id='content'></div>
+    <div id="content"></div>
 
     <script type="text/babel">
 
         var CONTACTS = [
             {
                 id: 1,
-                name: 'Darth Vader',
-                phoneNumber: '+250966666666',
-                image: 'http://cs7.pikabu.ru/images/big_size_comm_an/2014-03_7/13962622876915.gif'
+                name: 'Mary Oleksiuk',
+                phoneNumber: '+980765456234',
+                image: 'http://findicons.com/files/icons/2158/super_simple_grey_series/64/user.png'
             }, {
                 id: 2,
-                name: 'Princess Leia',
-                phoneNumber: '+250966344466',
-                image: 'http://images6.fanpop.com/image/photos/33100000/CARRIE-FISHER-anakin-vader-and-princess-leia-33186069-190-149.gif'
+                name: 'Sasha Medvedeva',
+                phoneNumber: '+098456789234',
+                image: 'http://findicons.com/files/icons/2158/super_simple_grey_series/64/user.png'
             }, {
                 id: 3,
-                name: 'Luke Skywalker',
+                name: 'Hoang Thien',
                 phoneNumber: '+250976654433',
-                image: 'http://www.youshouldshare.me/wp-content/uploads/2015/03/14264215682890-anigif_enhanced-buzz-13518-1367608452-4.gif'
+                image: 'http://findicons.com/files/icons/2158/super_simple_grey_series/64/user.png'
             }, {
                 id: 4,
-                name: 'Chewbacca',
+                name: 'Nguyen Tin',
                 phoneNumber: '+250456784935',
-                image: 'https://media.giphy.com/media/RUUdVZqwpfTRS/giphy.gif'
+                image: 'http://findicons.com/files/icons/2158/super_simple_grey_series/64/user.png'
             }
         ];
 
         var Contact = React.createClass({
             render: function() {
-                return <li>{this.props.name}</li>
+                return <li className="contact">
+                            <img className="contact-image" src={this.props.image} height="48" width="48" />
+                            <div className="contact-info">
+                                <div className="contact-name">{this.props.name}</div>
+                                <div className="contact-number">{this.props.phoneNumber}</div>        
+                            </div>
+                            
+                        </li>
             }
         });
 
         var ContactsList = React.createClass({
+            getInitialState: function(){
+                return {
+                    displayedContacts: CONTACTS
+                };
+            },
+            
+            handleSearch: function(event){
+                var searchQuery = event.target.value.toLowerCase();
+                var displayedContacts = CONTACTS.filter(function(el){
+                    var searchValue = el.name.toLowerCase();
+                    return searchValue.indexOf(searchQuery) !== -1;
+                });
+                
+                this.setState({
+                    displayedContacts: displayedContacts
+                });
+            },
+            
             render: function() {
                 return (
-                    <div>
+                    <div className="contacts">
+                        <input type="text" className="search-field" onChange={this.handleSearch} />
                         <ul>
                             {
-                                CONTACTS.map(function(el){
-                                    return <Contact name={el.name} />
-                                });
+                                this.state.displayedContacts.map(function(el){
+                                    return <Contact 
+                                                key={el.id} 
+                                                name={el.name} 
+                                                phoneNumber={el.phoneNumber} 
+                                                image={el.image} />;
+                                })
                             }
                         </ul>
                     </div>
